@@ -1,18 +1,28 @@
 class Solution {
-    public int maxSatisfaction(int[] satisfaction) {
+public int maxSatisfaction(int[] satisfaction) {
         Arrays.sort(satisfaction);
         
-        int[][] dp = new int[satisfaction.length + 1][satisfaction.length + 2];
-        for (int i = 0; i <= satisfaction.length; i++) {
-            Arrays.fill(dp[i], 0);
+        int n = satisfaction.length;
+        int[] dp1 = new int[n + 1]; // Stores the maximum satisfaction ending at position i
+        int[] dp2 = new int[n + 1]; // Stores the maximum satisfaction starting at position i
+        
+        // Fill dp2 from right to left
+        dp2[n] = 0;
+        int runningSum = 0;
+        for (int i = n - 1; i >= 0; i--) {
+            runningSum += satisfaction[i];
+            dp2[i] = dp2[i + 1] + runningSum;
         }
         
-        for (int i = satisfaction.length - 1; i >= 0; i--) {
-            for (int j = 1; j <= satisfaction.length; j++) {
-                dp[i][j] = Math.max(satisfaction[i] * j + dp[i + 1][j + 1], dp[i + 1][j]);
-            }
+        // Fill dp1 from right to left
+        int maxSatisfaction = 0;
+        runningSum = 0;
+        for (int i = n - 1; i >= 0; i--) {
+            runningSum += satisfaction[i];
+            dp1[i] = Math.max(runningSum + dp1[i + 1], 0);
+            maxSatisfaction = Math.max(maxSatisfaction, dp1[i]);
         }
         
-        return dp[0][1];
+        return maxSatisfaction;
     }
 }
