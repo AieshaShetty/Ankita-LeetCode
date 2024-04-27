@@ -13,8 +13,7 @@ public:
         dp1[1][0] = 1;
         for (int i = 2; i <= n; i++) {
             for (int j = 0; j <= i; j++) {
-                // dp0[i][j] = (dp0[i - 1][j - 1] + dp1[i - 1][j - 1] - dp1[i - limit - 1][j - limit - 1]);
-                // dp1[i][j] = (dp0[i - 1][j] + dp1[i - 1][j] - dp0[i - limit - 1][j]);
+                
                 {
                     int x = 0;
                     if (j >= 1) x = (x + dp0[i - 1][j - 1]) % MOD;
@@ -33,12 +32,7 @@ public:
                 }
             }
         }
-        
-        // for (int i = 2; i <= n; i++) {
-        //     for (int j = 0; j <= i; j++) {
-        //         cout << i << ' ' << j << ' ' << dp0[i][j] << ' ' << dp1[i][j] << '\n';
-        //     }
-        // }
+     
         
         int ans = (dp0[n][zero] + dp1[n][zero]) % MOD;
         if (ans < 0) ans += MOD;
