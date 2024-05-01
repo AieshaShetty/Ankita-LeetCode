@@ -5,7 +5,7 @@
         return sb.reverse().append(word.substring(word.indexOf(ch)+1)).toString();
     }
 }*/
-class Solution {
+/*class Solution {
     public String reversePrefix(String word, char ch) {
         int index = word.indexOf(ch);
         if (index == -1) return word; // If the character 'ch' is not found, return the original word
@@ -22,5 +22,18 @@ class Solution {
         }
         
         return new String(chars);
+    }
+}
+*/
+class Solution {
+    public String reversePrefix(String word, char ch) {
+          int indx=word.indexOf(ch);
+
+
+         String str=new String(word.substring(0,indx+1));
+             StringBuilder sb=new StringBuilder(str);
+             sb.reverse().append(word,indx+1,word.length());
+             String ans=new String(sb);
+             return ans;
     }
 }
