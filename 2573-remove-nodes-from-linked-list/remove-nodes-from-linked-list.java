@@ -10,44 +10,29 @@
  */
 class Solution {
     public ListNode removeNodes(ListNode head) {
-        HashMap<ListNode,ListNode> m = new HashMap<ListNode,ListNode>();
-        ListNode maxNode=getMax(head,m);
-        return removeNodes(head,maxNode,m);
-       
-  
-    }
-    public ListNode removeNodes(ListNode head,ListNode maxNode,HashMap<ListNode,ListNode> m) {
-        if (head.next==null){ 
-            return head;
-        }
-        if (head == maxNode){
-            maxNode=getMax(head.next,m);
-            head.next=removeNodes(head.next,maxNode,m);
-            return head;
-        }else{
-            return removeNodes(head.next,maxNode,m);
-        }
-     
-
-    }
-    private ListNode getMax(ListNode head, HashMap<ListNode,ListNode> cache){
-        if (head.next==null){
-            return head;
-        }else if(cache.get(head)!=null){
-            return cache.get(head);
-        }
-        else{
-            ListNode max = getMax(head.next,cache);
-
-            if(max.val>head.val){
-                cache.put(head,max);
-                return max;
+        Map<ListNode, Integer> maxMap = new HashMap<ListNode, Integer>();
+        setRightMax(head, maxMap);
+        ListNode dummyHead = new ListNode(0, head);
+        ListNode curr = dummyHead;
+        while (curr.next != null) {
+            if (maxMap.get(curr.next) > curr.next.val) {
+                curr.next = curr.next.next;
+            } else {
+                curr = curr.next;
             }
-            else{
-                                cache.put(head,head);
+        }
+        return dummyHead.next;
+    }
 
-                
-            } return head;
+    private void setRightMax(ListNode node, Map<ListNode, Integer> maxMap) {
+        if (!maxMap.containsKey(node)) {
+            if (node.next != null) {
+                setRightMax(node.next, maxMap);
+                int maxRight = Math.max(node.next.val, maxMap.get(node.next));
+                maxMap.put(node, maxRight);
+            } else {
+                maxMap.put(node, -1);
+            }
         }
     }
 }
