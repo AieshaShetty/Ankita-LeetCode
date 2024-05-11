@@ -1,30 +1,32 @@
 class Solution {
     public double mincostToHireWorkers(int[] quality, int[] wage, int k) {
-        PriorityQueue<Integer> maxHeap = new PriorityQueue<>(Collections.reverseOrder());
-        List<Pair<Double, Integer>> ratio = new ArrayList<>();
-        int n = quality.length, qualitySum = 0;
-        double res = Double.MAX_VALUE, maxRate = 0.0;
-
-        for (int i = 0; i < n; ++i) {
-            ratio.add(new Pair<>((double) wage[i] / quality[i], i));
+         int n = quality.length;
+        double[][] workers = new double[n][2];
+        
+        for (int i = 0; i < n; i++) {
+            workers[i][0] = (double) wage[i] / quality[i];
+            workers[i][1] = quality[i];
         }
-
-        ratio.sort(Comparator.comparingDouble(p -> p.getKey()));
-        for (int i = 0; i < k; ++i) {
-            qualitySum += quality[ratio.get(i).getValue()];
-            maxRate = Math.max(maxRate, ratio.get(i).getKey());
-            maxHeap.offer(quality[ratio.get(i).getValue()]);
+        
+        Arrays.sort(workers, Comparator.comparingDouble(a -> a[0]));
+        
+        PriorityQueue<Double> maxHeap = new PriorityQueue<>(Collections.reverseOrder());
+        double totalQuality = 0;
+        double minCost = Double.MAX_VALUE;
+        
+        for (double[] worker : workers) {
+            maxHeap.offer(worker[1]);
+            totalQuality += worker[1];
+            
+            if (maxHeap.size() > k) {
+                totalQuality -= maxHeap.poll();
+            }
+            
+            if (maxHeap.size() == k) {
+                minCost = Math.min(minCost, totalQuality * worker[0]);
+            }
         }
-
-        res = maxRate * qualitySum;
-        for (int i = k; i <n; ++i) {
-            maxRate = Math.max(maxRate, ratio.get(i).getKey());
-            qualitySum -= maxHeap.poll();
-            qualitySum += quality[ratio.get(i).getValue()];
-            maxHeap.offer(quality[ratio.get(i).getValue()]);
-            res = Math.min(res, maxRate * qualitySum);
-        }
-
-        return res;
+        
+        return minCost;
     }
 }
