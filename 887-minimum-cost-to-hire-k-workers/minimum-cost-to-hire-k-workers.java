@@ -1,54 +1,21 @@
 class Solution {
     public double mincostToHireWorkers(int[] quality, int[] wage, int k) {
-        int n = quality.length;
-        double minCost = Double.MAX_VALUE;
-        double qualityTillNow = 0;
-
-        List<Worker> workers = new ArrayList<>();
-
-        for (int i = 0; i < n; i++) {
-            workers.add(new Worker(wage[i] / (double) quality[i], quality[i]));
+        List<Pair<Double, Integer>> costLs = new ArrayList<>();
+        Queue<Integer> maxHeap = new PriorityQueue<>(Collections.reverseOrder());
+        for(int i=0;i<wage.length;i++) 
+            costLs.add(new Pair<>((double)wage[i]/quality[i], quality[i]));
+        Collections.sort(costLs, (a,b) -> Double.compare(a.getKey(), b.getKey()));
+        double totalCost=0, res=Double.POSITIVE_INFINITY;
+        for(Pair<Double, Integer> pair: costLs) {
+            double currCostRatio = pair.getKey();
+            int currQulty = pair.getValue();
+            totalCost += currQulty;
+            maxHeap.add(currQulty);
+            if(maxHeap.size() > k)
+                totalCost -= maxHeap.poll();
+            if(maxHeap.size() == k)            
+                res = Math.min(res, (totalCost*currCostRatio));
         }
-
-        // Sorting workers by their wage-quality ratio
-        Collections.sort(workers);
-
-        // Max-heap for the qualities using a comparator
-        PriorityQueue<Integer> highQualityWorkers = new PriorityQueue<>(Comparator.reverseOrder());
-
-        for (Worker worker : workers) {
-            double ratio = worker.ratio;
-            int qua = worker.quality;
-
-            qualityTillNow += qua;
-            highQualityWorkers.add(qua);
-
-            if (highQualityWorkers.size() > k) {
-                qualityTillNow -= highQualityWorkers.poll();
-            }
-
-            if (highQualityWorkers.size() == k) {
-                minCost = Math.min(minCost, qualityTillNow * ratio);
-            }
-        }
-
-        return minCost;
-    }
-
-    // Helper class to store the ratio and quality and implement comparable for
-    // sorting
-    private class Worker implements Comparable<Worker> {
-        double ratio;
-        int quality;
-
-        Worker(double ratio, int quality) {
-            this.ratio = ratio;
-            this.quality = quality;
-        }
-
-        @Override
-        public int compareTo(Worker other) {
-            return Double.compare(this.ratio, other.ratio);
-        }
+        return res;
     }
 }
