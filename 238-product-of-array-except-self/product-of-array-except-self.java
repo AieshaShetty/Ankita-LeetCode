@@ -1,17 +1,37 @@
 class Solution {
-    public int[] productExceptSelf(int[] nums) {
-        int suffProduct=1, n=nums.length;
-        int[] ans=new int[n];
-        for(int i=n-1;i>=0;i--){
-            suffProduct*=nums[i];
-            ans[i]=suffProduct;
+    public static int[] productExceptSelf(int[] nums) {
+        int zeros = countZeros(nums);
+        if (zeros > 1) {
+            return new int[nums.length];
         }
-        int product=1;
-        for(int i=0;i<nums.length;i++){
-            int currProduct=i+1<n? product*ans[i+1]:product;
-            ans[i]=currProduct;
-            product*=nums[i];
+
+        int prd = reduceProduct(nums);
+
+        if (zeros > 0) {
+            return Arrays.stream(nums).map(x -> (x != 0) ? 0 : prd).toArray();
+        } else {
+            return Arrays.stream(nums).map(x -> prd / x).toArray();
         }
-        return ans;
     }
+
+    private static int countZeros(int[] nums) {
+        int count = 0;
+        for (int num : nums) {
+            if (num == 0) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    private static int reduceProduct(int[] nums) {
+        int product = 1;
+        for (int num : nums) {
+            if (num != 0) {
+                product *= num;
+            }
+        }
+        return product;
+    }
+
 }
