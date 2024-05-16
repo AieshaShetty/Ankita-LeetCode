@@ -1,19 +1,20 @@
 class Solution {
     public boolean increasingTriplet(int[] nums) {
-        int[] smallestTwo = new int[2];
-        Arrays.fill(smallestTwo, Integer.MAX_VALUE);
-        smallestTwo[0] = nums[0]; 
-        for (int i = 1; i < nums.length; i++) {
-            int currentNum = nums[i];
-            
-            if (currentNum < smallestTwo[0])
-                smallestTwo[0] = currentNum;
-            else if (currentNum > smallestTwo[0] && currentNum < smallestTwo[1])
-                smallestTwo[1] = currentNum;
-            else if (currentNum > smallestTwo[1])
+        int lowest=Integer.MAX_VALUE;
+        int secondlowest=Integer.MAX_VALUE;
+
+        for(int x: nums){
+            if(lowest!=Integer.MAX_VALUE && secondlowest!=Integer.MAX_VALUE 
+            && secondlowest<x){
                 return true;
+            }
+            if(x<lowest){
+                lowest=x;
+            }else if(x!=lowest && x<secondlowest){
+                secondlowest=x;
+            }
         }
-        
         return false;
+        
     }
 }
