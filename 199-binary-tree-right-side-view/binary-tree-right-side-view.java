@@ -25,6 +25,12 @@ class Solution {
         
         rightView(curr_root.right, level+1,result);
         rightView(curr_root.left, level+1,result);
+        
+        /*if left view is given then 
+        rightView(curr_root.left, level+1,result);
+        rightView(curr_root.right, level+1,result);
+        */
+        //TC: O(N), SC: O(H) By using reverse preorder traversal (Root Right Left)
     }
     
 }
