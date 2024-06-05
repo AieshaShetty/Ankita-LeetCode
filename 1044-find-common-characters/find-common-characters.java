@@ -1,3 +1,6 @@
+/*
+Given the constraints (only 26 possible characters), the array-based solution is already very efficient. The HashMap approach does not offer a significant advantage in terms of time or space complexity. In fact, the array-based approach may have slightly better constant factors due to the absence of hash map overhead. Therefore, while the HashMap approach is a valid alternative, the array-based solution is likely more efficient and straightforward for this problem.
+*/
 class Solution {
     public List<String> commonChars(String[] words) {
         // Count characters in the first word
