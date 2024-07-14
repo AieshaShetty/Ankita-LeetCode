@@ -1,5 +1,3 @@
-import java.util.*;
-
 class Solution {
     public String countOfAtoms(String formula) {
         int n = formula.length();
