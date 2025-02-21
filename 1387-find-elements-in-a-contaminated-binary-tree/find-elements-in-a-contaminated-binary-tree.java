@@ -14,7 +14,7 @@
  * }
  */
 class FindElements {
-    HashSet<Integer> set; // stores all recovered values
+    HashSet<Integer> set;
 
     public FindElements(TreeNode root) {
         set = new HashSet<>();
@@ -22,15 +22,15 @@ class FindElements {
     }
     
     public boolean find(int target) {
-        return set.contains(target);//check if target is present or not
+        return set.contains(target);
     }
 
     private void recoverTree(TreeNode root, int value) {
         if (root == null) return;
         set.add(value);//which is zero
         root.val = value;
-        recoverTree(root.left, 2 * value + 1);//for left of the node 
-        recoverTree(root.right, 2 * value + 2);//for right of the node
+        recoverTree(root.left, 2 * value + 1);
+        recoverTree(root.right, 2 * value + 2);
     }
 }
 
